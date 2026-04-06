@@ -113,7 +113,7 @@ def get_health():
 # Gradio UI
 # ---------------------------------------------------------------------------
 
-with gr.Blocks(title="SRE-Bench Agent", theme=gr.themes.Soft()) as demo:
+with gr.Blocks(title="SRE-Bench Agent") as demo:
     gr.Markdown("""
 # 🚨 SRE-Bench: Incident Response Environment
 An AI benchmark where agents act as on-call Site Reliability Engineers, diagnosing and fixing production incidents through a simulated terminal API.
@@ -140,4 +140,4 @@ An AI benchmark where agents act as on-call Site Reliability Engineers, diagnosi
     btn_infer.click(run_inference, outputs=output)
 
 if __name__ == "__main__":
-    demo.launch(server_name="0.0.0.0", server_port=7860)
+    demo.launch(server_name="0.0.0.0", server_port=7860, theme=gr.themes.Soft())

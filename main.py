@@ -20,15 +20,30 @@ from environment import Action, Observation, Reward
 from graders import grade_task
 from tasks import TASK_REGISTRY
 
-# app.py is still at the root. We need to import the 'demo' from it.
-# If we run with 'python -m server.app', the root directory is in sys.path.
-try:
-    from app import demo
-except ImportError:
-    import sys
-    import os
-    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-    from app import demo
+# --- Gradio UI Definition ---
+def run_inference(task_id, hf_token, model_name, api_base):
+    # This is a placeholder for the actual inference logic if needed by UI
+    from inference import run_agent_on_task
+    try:
+        result = run_agent_on_task(task_id, hf_token, model_name, api_base)
+        return result
+    except Exception as e:
+        return f"Error: {e}"
+
+with gr.Blocks(title="SRE-Bench Dashboard", css=".gradio-container {background-color: #f0f2f5}", theme="soft") as demo:
+    gr.Markdown("# 🛠️ SRE-Bench: Incident Response Environment")
+    with gr.Tab("Status"):
+        gr.Markdown("### Service Health")
+        output_status = gr.Textbox(label="System Status", value="Waiting for agent...", interactive=False)
+    with gr.Tab("Run Inference"):
+        gr.Markdown("### Manually trigger agent inference")
+        task_input = gr.Dropdown(choices=["disk_full", "db_pool_exhausted", "data_corruption"], label="Task ID", value="disk_full")
+        token_input = gr.Textbox(label="HF Token (optional)", type="password")
+        model_input = gr.Textbox(label="Model Name", value="gpt-4o")
+        api_input = gr.Textbox(label="API Base URL", value="https://api.openai.com/v1")
+        btn_infer = gr.Button("🚀 Run Agent")
+        output_infer = gr.Textbox(label="Inference Logs", lines=10)
+        btn_infer.click(run_inference, inputs=[task_input, token_input, model_input, api_input], outputs=output_infer)
 
 app = FastAPI(
     title="SRE-Bench: Incident Response Environment",

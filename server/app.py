@@ -251,8 +251,11 @@ app = gr.mount_gradio_app(app, demo, path="/")
 # Entry point
 # ---------------------------------------------------------------------------
 
-if __name__ == "__main__":
+def main():
     import uvicorn
     # Use port 7860 by default for HuggingFace
     port = int(os.getenv("PORT", 7860))
     uvicorn.run(app, host="0.0.0.0", port=port)
+
+if __name__ == "__main__":
+    main()

@@ -25,6 +25,14 @@ Reasoning Loop: The agent must observe the terminal output, "think" (chain-of-th
 The Ultimate Goal: Level 2 On-Call Automation
 The core value of systems like this is burnout prevention. Currently, if a disk fills up, a human gets paged in the middle of the night. With agents proven by SRE-Bench, the future workflow becomes:
 > PagerDuty triggers the AI Agent → The Agent reads the logs and finds the huge file → The Agent deletes it and restarts the API → The Agent messages Slack: *"Hey, the disk filled up at 3 AM. I cleared out the old logs and the system is green. Go back to sleep."*
+
+---
+## Interactive Web Interfaces
+
+SRE-Bench comes with two beautiful Frontend UIs to visualize the benchmark:
+
+1. **The Gradio Control Panel (`http://localhost:7860`)**: A polished hub to manually trigger health checks, mass-execute stress tests, or launch inference agents with a single click.
+2. **The Live Action Dashboard (`http://localhost:8000/`)**: A sleek, animated terminal UI (inspired by dark-mode IDEs) where you can watch the AI agent's reasoning, command-execution, and the real-time health of microservices play out visually. 
 ---
 Environment Description
 The agent interacts with a simulated production system consisting of multiple services (API, database, auth, fulfillment, finance). Each episode presents a different incident. The agent must:
@@ -120,10 +128,10 @@ git clone https://github.com/Neeln11/SRE-Bench
 cd SRE-Bench
 pip install -r requirements.txt
 
-# Run the environment server
-uvicorn main:app --host 0.0.0.0 --port 7860
+# Run the environment server (FastAPI) AND the Gradio Web UI
+python app.py
 
-# Run the baseline inference script (in a second terminal)
+# (Optional) Run the inference script manually
 set HF_TOKEN=your_token
 set API_BASE_URL=https://router.huggingface.co/v1
 set MODEL_NAME=Qwen/Qwen2.5-72B-Instruct

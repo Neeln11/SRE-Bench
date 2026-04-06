@@ -21,8 +21,9 @@ COPY . .
 EXPOSE 7860
 
 # Healthcheck against consolidated app (port 7860)
+# We use uv run to ensure we use the virtualenv
 HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
-  CMD python -c "import requests; requests.get('http://localhost:7860/health', timeout=5)"
+  CMD uv run python -c "import requests; requests.get('http://localhost:7860/health', timeout=5)"
 
-# Entry point using the user-requested direct python launch
-CMD ["python", "main.py"]
+# Entry point using uv run to ensure the virtualenv is active
+CMD ["uv", "run", "python", "main.py"]

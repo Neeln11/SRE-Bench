@@ -15,9 +15,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, StreamingResponse
 from pydantic import BaseModel
 
+import gradio as gr
 from environment import Action, Observation, Reward
 from graders import grade_task
 from tasks import TASK_REGISTRY
+from app import demo
 
 app = FastAPI(
     title="SRE-Bench: Incident Response Environment",
@@ -221,10 +223,17 @@ def grade(session_id: str = "default"):
 
 
 # ---------------------------------------------------------------------------
+# Mount Gradio UI
+# ---------------------------------------------------------------------------
+app = gr.mount_gradio_app(app, demo, path="/")
+
+
+# ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
     import uvicorn
+    # Use port 7860 by default for HuggingFace
     port = int(os.getenv("PORT", 7860))
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
+    uvicorn.run(app, host="0.0.0.0", port=port)

@@ -16,5 +16,5 @@ EXPOSE 7860
 HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
   CMD python -c "import requests; requests.get('http://localhost:7860/', timeout=5)"
 
-# Entry point is app.py (launches FastAPI on 8000 + Gradio on 7860)
-CMD ["python", "app.py"]
+# Entry point is main.py (launches FastAPI + Gradio on 7860)
+CMD ["python", "main.py"]

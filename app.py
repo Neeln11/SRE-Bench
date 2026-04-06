@@ -14,28 +14,9 @@ import requests
 # Start the FastAPI backend in a background thread
 # ---------------------------------------------------------------------------
 
-def start_backend():
-    subprocess.Popen(
-        ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
-
-def wait_for_backend(timeout=30):
-    """Poll until the FastAPI server is ready."""
-    for _ in range(timeout):
-        try:
-            r = requests.get("http://localhost:8000/health", timeout=2)
-            if r.status_code == 200:
-                return True
-        except Exception:
-            pass
-        time.sleep(1)
-    return False
-
-# Start backend once at import time
-threading.Thread(target=start_backend, daemon=True).start()
-wait_for_backend()
+# Wait for backend is no longer needed as they run together
+# threading.Thread(target=start_backend, daemon=True).start()
+# wait_for_backend()
 
 # ---------------------------------------------------------------------------
 # Gradio action functions
@@ -43,7 +24,7 @@ wait_for_backend()
 
 def run_stress_test():
     env = os.environ.copy()
-    env["SRE_BENCH_URL"] = "http://localhost:8000"
+    env["SRE_BENCH_URL"] = "http://localhost:7860"
     try:
         result = subprocess.check_output(
             ["python", "test_agent.py", "stress"],
@@ -61,7 +42,7 @@ def run_stress_test():
 
 def run_auto_agent():
     env = os.environ.copy()
-    env["SRE_BENCH_URL"] = "http://localhost:8000"
+    env["SRE_BENCH_URL"] = "http://localhost:7860"
     try:
         result = subprocess.check_output(
             ["python", "test_agent.py", "auto"],
@@ -84,7 +65,7 @@ def run_inference():
     env = os.environ.copy()
     env["HF_TOKEN"] = hf_token
     env["TASK_ID"] = os.getenv("TASK_ID", "disk_full")
-    env["SRE_BENCH_URL"] = "http://localhost:8000"
+    env["SRE_BENCH_URL"] = "http://localhost:7860"
     try:
         result = subprocess.check_output(
             ["python", "inference.py"],
@@ -102,8 +83,8 @@ def run_inference():
 
 def get_health():
     try:
-        r = requests.get("http://localhost:8000/health", timeout=5)
-        tasks = requests.get("http://localhost:8000/tasks", timeout=5)
+        r = requests.get("http://localhost:7860/health", timeout=5)
+        tasks = requests.get("http://localhost:7860/tasks", timeout=5)
         return f"✅ Server status: {r.json()}\n\nAvailable tasks:\n{tasks.text}"
     except Exception as e:
         return f"❌ Server not responding: {e}"

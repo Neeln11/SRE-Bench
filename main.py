@@ -64,6 +64,10 @@ class StepResponse(BaseModel):
     final_score: Optional[float] = None
 
 
+class GradeRequest(BaseModel):
+    session_id: str = "default"
+
+
 # ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
@@ -168,7 +172,7 @@ def list_tasks():
 
 
 @app.post("/reset", response_model=Observation)
-def reset(req: ResetRequest):
+def reset(req: ResetRequest = ResetRequest()):
     if req.task_id not in TASK_REGISTRY:
         raise HTTPException(
             status_code=400,
@@ -181,7 +185,12 @@ def reset(req: ResetRequest):
 
 
 @app.post("/step", response_model=StepResponse)
-def step(req: StepRequest):
+def step(req: StepRequest = None):
+    if req is None:
+        raise HTTPException(
+            status_code=400,
+            detail="Step request requires an 'action'. Example: {\"action\": {\"command\": \"read_log\", \"params\": {\"service\": \"api\"}}}",
+        )
     env = _sessions.get(req.session_id)
     if env is None:
         raise HTTPException(
@@ -214,7 +223,8 @@ def get_state(session_id: str = "default"):
 
 
 @app.post("/grade")
-def grade(session_id: str = "default"):
+def grade(req: GradeRequest = GradeRequest()):
+    session_id = req.session_id
     env = _sessions.get(session_id)
     if env is None:
         raise HTTPException(status_code=404, detail="Session not found.")

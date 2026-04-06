@@ -21,6 +21,7 @@ import sys
 import textwrap
 from typing import List, Optional
 
+import re
 import requests
 from openai import OpenAI
 
@@ -109,6 +110,7 @@ def env_step(action: dict, session_id: str) -> dict:
 # ---------------------------------------------------------------------------
 
 def get_action(conversation: List[dict]) -> Optional[dict]:
+    content = ""
     try:
         response = client.chat.completions.create(
             model=MODEL_NAME,
@@ -117,13 +119,23 @@ def get_action(conversation: List[dict]) -> Optional[dict]:
             max_tokens=MAX_TOKENS,
         )
         content = response.choices[0].message.content.strip()
-        # Strip markdown fences if present
-        if content.startswith("```"):
-            content = content.split("```")[1]
-            if content.startswith("json"):
-                content = content[4:]
-        return json.loads(content.strip())
+        
+        # 1. Try finding a JSON block anywhere in the text using regex
+        match = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', content, re.DOTALL)
+        if match:
+            json_str = match.group(1)
+        else:
+            # 2. Fallback: extract substring from first { to last }
+            start = content.find('{')
+            end = content.rfind('}')
+            if start != -1 and end != -1:
+                json_str = content[start:end+1]
+            else:
+                json_str = content
+                
+        return json.loads(json_str)
     except Exception as e:
+        print(f"  [DEBUG] LLM parse error: {e}. Raw: {content[:100]}...", flush=True)
         return {"command": "escalate", "params": {}}
 
 

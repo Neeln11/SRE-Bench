@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sre-bench"
+version = "1.0.0"
+description = "SRE-Bench: Incident Response Environment for LLM Agents"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Neel", email = "neel@example.com" }
+]
+dependencies = [
+    "fastapi>=0.111.0",
+    "uvicorn>=0.30.1",
+    "pydantic>=2.7.1",
+    "openai>=1.30.1",
+    "requests>=2.32.3",
+    "gradio",
+]
+
+[tool.setuptools]
+py-modules = ["main", "app", "environment", "graders", "inference", "state_manager", "tasks"]

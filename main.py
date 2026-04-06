@@ -16,9 +16,9 @@ from fastapi.responses import HTMLResponse, StreamingResponse
 from pydantic import BaseModel
 
 import gradio as gr
-from .environment import Action, Observation, Reward
-from .graders import grade_task
-from .tasks import TASK_REGISTRY
+from environment import Action, Observation, Reward
+from graders import grade_task
+from tasks import TASK_REGISTRY
 
 # app.py is still at the root. We need to import the 'demo' from it.
 # If we run with 'python -m server.app', the root directory is in sys.path.
@@ -251,11 +251,9 @@ app = gr.mount_gradio_app(app, demo, path="/")
 # Entry point
 # ---------------------------------------------------------------------------
 
-def run():
+def main():
     import uvicorn
-    # Use port 7860 by default for HuggingFace
-    port = int(os.getenv("PORT", 7860))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run("main:app", host="0.0.0.0", port=7860, workers=1)
 
 if __name__ == "__main__":
-    run()
+    main()

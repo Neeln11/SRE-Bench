@@ -5,11 +5,14 @@ Endpoints: POST /reset, POST /step, GET /state, GET /health, GET /tasks
 
 from __future__ import annotations
 
+import asyncio
+import json as _json
 import os
 from typing import Any, Dict, Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse, StreamingResponse
 from pydantic import BaseModel
 
 from environment import Action, Observation, Reward
@@ -62,6 +65,73 @@ class StepResponse(BaseModel):
 # ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
+
+# Optimal demo sequences for the live dashboard
+DEMO_SEQUENCES: Dict[str, list] = {
+    "disk_full": [
+        Action(command="check_metrics", params={"target": "disk"}),
+        Action(command="read_log",      params={"service": "app"}),
+        Action(command="apply_fix",     params={"fix_type": "delete_log", "target": "/var/log/app/app.log.2024-01-14"}),
+    ],
+    "db_pool_exhausted": [
+        Action(command="read_log",      params={"service": "api"}),
+        Action(command="check_metrics", params={"target": "database"}),
+        Action(command="read_log",      params={"service": "auth"}),
+        Action(command="apply_fix",     params={"fix_type": "restart_auth_with_connection_cleanup"}),
+    ],
+    "data_corruption": [
+        Action(command="read_log",      params={"service": "orders"}),
+        Action(command="read_log",      params={"service": "fulfillment"}),
+        Action(command="read_log",      params={"service": "finance"}),
+        Action(command="run_diagnostic",params={"type": "deploy_history"}),
+        Action(command="rollback",      params={"service": "orders"}),
+        Action(command="apply_fix",     params={"fix_type": "reprocess_affected_orders"}),
+    ],
+}
+
+
+@app.get("/", response_class=HTMLResponse)
+def dashboard():
+    return open("dashboard.html", encoding="utf-8").read()
+
+
+@app.get("/stream-solve/{task_id}")
+async def stream_solve(task_id: str, request: Request):
+    if task_id not in TASK_REGISTRY:
+        return {"error": f"Unknown task '{task_id}'"}
+
+    async def generator():
+        env = TASK_REGISTRY[task_id]()
+        obs = env.reset()
+        _sessions["demo"] = env
+        yield f"data: {_json.dumps({'type': 'reset', 'obs': obs.model_dump()})}\n\n"
+
+        for action in DEMO_SEQUENCES.get(task_id, []):
+            await asyncio.sleep(1.5)
+            if await request.is_disconnected():
+                break
+            obs, reward, done, info = env.step(action)
+            payload = {
+                "type": "step",
+                "action": {"command": str(action.command), "params": action.params},
+                "obs": obs.model_dump(),
+                "reward": reward.model_dump(),
+                "done": done,
+                "info": {k: v for k, v in info.items() if isinstance(v, (int, float, str, bool, type(None)))},
+            }
+            yield f"data: {_json.dumps(payload)}\n\n"
+            if done:
+                break
+
+        score = grade_task(task_id, env.state())
+        yield f"data: {_json.dumps({'type': 'end', 'score': score})}\n\n"
+
+    return StreamingResponse(
+        generator(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
+
 
 @app.get("/health")
 def health():

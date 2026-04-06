@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SRE-Bench | Incident Response Environment</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d1117;--surface:#161b22;--surface2:#1c2128;--border:#30363d;
+  --text:#e6edf3;--muted:#8b949e;--red:#ef4444;--orange:#f97316;
+  --green:#22c55e;--yellow:#eab308;--blue:#3b82f6;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;
+  border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:100;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:700}
+.badge{background:var(--red);padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase}
+.status-pill{display:flex;align-items:center;gap:8px;padding:5px 14px;
+  background:rgba(34,197,94,.1);border:1px solid var(--green);border-radius:20px;
+  font-size:12px;font-weight:600;color:var(--green);white-space:nowrap}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.container{max-width:1380px;margin:0 auto;padding:20px 28px}
+.alert{margin-bottom:20px;padding:14px 18px;background:rgba(239,68,68,.08);
+  border:1px solid rgba(239,68,68,.3);border-left:4px solid var(--red);border-radius:8px;
+  animation:fadeIn .4s ease;display:none}
+.alert-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--red);margin-bottom:5px}
+.alert-text{font-size:13px;line-height:1.6}
+.grid{display:grid;grid-template-columns:300px 1fr;gap:20px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.ph{padding:13px 18px;border-bottom:1px solid var(--border);font-size:11px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--muted);display:flex;align-items:center;gap:8px}
+.task{padding:14px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s;
+  position:relative}
+.task:hover{background:rgba(239,68,68,.05)}
+.task.active{background:rgba(239,68,68,.1)}
+.task.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red)}
+.diff{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.easy{background:rgba(34,197,94,.15);color:var(--green)}
+.medium{background:rgba(234,179,8,.15);color:var(--yellow)}
+.hard{background:rgba(239,68,68,.15);color:var(--red)}
+.task-name{font-weight:600;font-size:14px;margin-bottom:3px}
+.task-desc{font-size:11px;color:var(--muted);line-height:1.5}
+.btn-wrap{padding:14px 18px;border-top:1px solid var(--border)}
+.btn{width:100%;padding:9px 18px;border:none;border-radius:7px;font-family:'Inter',sans-serif;
+  font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;background:var(--red);color:#fff}
+.btn:hover:not(:disabled){background:#dc2626;transform:translateY(-1px)}
+.btn:disabled{background:#7f1d1d;cursor:not-allowed;transform:none}
+.svc-grid{padding:14px 18px;display:flex;flex-direction:column;gap:10px}
+.svc{display:flex;align-items:center;gap:10px}
+.vdot{width:9px;height:9px;border-radius:50%;flex-shrink:0;transition:background .5s}
+.vh{background:var(--green)}
+.vd{background:var(--red);animation:pulse 1.5s infinite}
+.vw{background:var(--yellow);animation:pulse 2s infinite}
+.vn{font-size:12px;font-weight:500;width:90px}
+.vs{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.right{display:flex;flex-direction:column;gap:20px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;padding:10px 16px;border-bottom:1px solid var(--border);min-height:44px}
+.chip{width:26px;height:26px;border-radius:50%;background:var(--border);display:flex;
+  align-items:center;justify-content:center;font-size:10px;font-weight:600;transition:all .4s}
+.chip.ok{background:var(--green);color:#000}
+.chip.fail{background:var(--red)}
+.chip.cur{background:var(--orange);color:#000;animation:pulse 1s infinite}
+.terminal{background:#010409;padding:16px 18px;font-family:'JetBrains Mono',monospace;font-size:12px;
+  min-height:280px;max-height:440px;overflow-y:auto;line-height:1.7}
+.terminal::-webkit-scrollbar{width:5px}
+.terminal::-webkit-scrollbar-track{background:#010409}
+.terminal::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.tl{margin-bottom:2px;animation:fadeIn .3s ease}
+.tp{color:var(--red)}
+.to{color:var(--muted);padding-left:14px;display:block}
+.th{color:var(--orange);margin-top:10px;margin-bottom:2px;font-weight:500}
+.tg{color:var(--green)}
+.tr{color:var(--red)}
+.tw{color:var(--yellow)}
+.score-box{padding:16px 18px}
+.score-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:7px;color:var(--muted)}
+.score-row b{color:var(--text)}
+.bar{height:7px;background:var(--border);border-radius:4px;overflow:hidden}
+.fill{height:100%;background:linear-gradient(90deg,var(--red),var(--orange));
+  border-radius:4px;width:0%;transition:width .9s cubic-bezier(.4,0,.2,1)}
+.ph-right{display:flex;justify-content:space-between;align-items:center;width:100%}
+.step-lbl{font-size:11px;color:var(--muted);text-transform:none;letter-spacing:.01em}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🚨 <span>SRE-Bench</span><span class="badge">OpenEnv</span></div>
+  <div class="status-pill"><div class="sdot"></div> Environment Running</div>
+</header>
+
+<div class="container">
+  <div id="alert" class="alert">
+    <div class="alert-label">⚡ Active Incident</div>
+    <div id="alert-text" class="alert-text"></div>
+  </div>
+
+  <div class="grid">
+    <!-- Left column -->
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div class="panel">
+        <div class="ph">📋 Select Task</div>
+        <div class="task active" id="tc-disk_full" onclick="sel('disk_full')">
+          <div class="diff easy">Easy</div>
+          <div class="task-name">Disk Full</div>
+          <div class="task-desc">Find the culprit log file and free disk space to restore the API.</div>
+        </div>
+        <div class="task" id="tc-db_pool_exhausted" onclick="sel('db_pool_exhausted')">
+          <div class="diff medium">Medium</div>
+          <div class="task-name">DB Pool Exhausted</div>
+          <div class="task-desc">Trace auth service DB connection leak across 3 log sources and fix.</div>
+        </div>
+        <div class="task" id="tc-data_corruption" onclick="sel('data_corruption')">
+          <div class="diff hard">Hard</div>
+          <div class="task-name">Silent Data Corruption</div>
+          <div class="task-desc">Trace cascading serializer bug across orders/fulfillment/finance and rollback safely.</div>
+        </div>
+        <div class="btn-wrap">
+          <button class="btn" id="run-btn" onclick="runAgent()">🤖 Watch AI Solve This</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="ph">📡 Service Health</div>
+        <div class="svc-grid">
+          <div class="svc"><div class="vdot vh" id="vd-api"></div><span class="vn">api</span><span class="vs" id="vs-api">healthy</span></div>
+          <div class="svc"><div class="vdot vh" id="vd-database"></div><span class="vn">database</span><span class="vs" id="vs-database">healthy</span></div>
+          <div class="svc"><div class="vdot vh" id="vd-auth"></div><span class="vn">auth</span><span class="vs" id="vs-auth">healthy</span></div>
+          <div class="svc"><div class="vdot vh" id="vd-orders"></div><span class="vn">orders</span><span class="vs" id="vs-orders">healthy</span></div>
+          <div class="svc"><div class="vdot vh" id="vd-fulfillment"></div><span class="vn">fulfillment</span><span class="vs" id="vs-fulfillment">healthy</span></div>
+          <div class="svc"><div class="vdot vh" id="vd-finance"></div><span class="vn">finance</span><span class="vs" id="vs-finance">healthy</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column -->
+    <div class="right">
+      <div class="panel">
+        <div class="ph">
+          <span>🤖 Agent Terminal</span>
+          <div class="ph-right"><span class="step-lbl" id="step-lbl">Select a task and press Run</span></div>
+        </div>
+        <div class="chips" id="chips"></div>
+        <div class="terminal" id="term">
+          <span class="to">Welcome to SRE-Bench. Select a task and click "Watch AI Solve This".</span><br>
+          <span class="to" style="color:#333;margin-top:6px;display:block">SRE-Bench v1.0.0 | OpenEnv-compatible API</span>
+        </div>
+        <div class="score-box">
+          <div class="score-row"><span>Episode Score</span><b id="score-val">—</b></div>
+          <div class="bar"><div class="fill" id="fill"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let task='disk_full',running=false,es=null;
+
+function sel(t){
+  if(running)return;
+  task=t;
+  document.querySelectorAll('.task').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tc-'+t).classList.add('active');
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function addLine(html){
+  const d=document.createElement('div');
+  d.className='tl';d.innerHTML=html;
+  const t=document.getElementById('term');
+  t.appendChild(d);t.scrollTop=t.scrollHeight;
+}
+
+function clearTerm(){
+  document.getElementById('term').innerHTML='';
+  document.getElementById('chips').innerHTML='';
+  document.getElementById('fill').style.width='0%';
+  document.getElementById('score-val').textContent='—';
+}
+
+function addChip(n,cls){
+  const c=document.createElement('div');
+  c.className='chip '+cls;c.id='chip-'+n;c.textContent=n;
+  document.getElementById('chips').appendChild(c);
+}
+
+function setChip(n,cls){const c=document.getElementById('chip-'+n);if(c)c.className='chip '+cls}
+
+function updSvc(svcs){
+  svcs.forEach(s=>{
+    const dot=document.getElementById('vd-'+s.name);
+    const stat=document.getElementById('vs-'+s.name);
+    if(!dot||!stat)return;
+    dot.className='vdot';
+    if(s.status==='healthy'){
+      dot.classList.add('vh');
+      stat.textContent=`healthy | p99=${s.latency_p99_ms}ms`;
+      stat.style.color='var(--green)';
+    } else {
+      dot.classList.add('vd');
+      stat.textContent=`DEGRADED ${(s.error_rate*100).toFixed(0)}% err | p99=${s.latency_p99_ms}ms`;
+      stat.style.color='var(--red)';
+    }
+  });
+}
+
+function runAgent(){
+  if(running)return;
+  running=true;
+  const btn=document.getElementById('run-btn');
+  btn.disabled=true;btn.textContent='⏳ Agent Running...';
+  clearTerm();
+  document.getElementById('alert').style.display='none';
+  document.getElementById('step-lbl').textContent='Connecting...';
+  if(es)es.close();
+
+  es=new EventSource('/stream-solve/'+task);
+  let cum=0;
+
+  es.onmessage=function(ev){
+    const d=JSON.parse(ev.data);
+    if(d.type==='reset'){
+      document.getElementById('alert-text').textContent=d.obs.incident_description;
+      document.getElementById('alert').style.display='block';
+      updSvc(d.obs.services);
+      addLine('<span class="th">══ INCIDENT LOADED ═══════════════════════</span>');
+      addLine('<span class="to">'+esc(d.obs.incident_description)+'</span>');
+      addLine('<span class="th">══ AGENT STARTING ════════════════════════</span>');
+      document.getElementById('step-lbl').textContent='Episode started | max 15 steps';
+
+    } else if(d.type==='step'){
+      const n=d.info.step;cum+=d.reward.value;
+      addChip(n,d.reward.value>0?'ok':'fail');
+      addLine('<span class="th">【Step '+n+'】</span>');
+      addLine('<span class="tp">$</span> <span>'+esc(d.action.command)+'('+esc(JSON.stringify(d.action.params))+')</span>');
+      const lines=(d.obs.terminal_output||'').split('\n').slice(0,10);
+      lines.forEach(l=>{if(l.trim())addLine('<span class="to">'+esc(l)+'</span>')});
+      const rc=d.reward.value>0?'tg':d.reward.value<0?'tr':'tw';
+      addLine('<span class="'+rc+'">  → reward: '+(d.reward.value>0?'+':'')+d.reward.value.toFixed(2)+' (cumulative: '+cum.toFixed(2)+')</span>');
+      updSvc(d.obs.services);
+      document.getElementById('step-lbl').textContent='Step '+n+'/15 | Score building...';
+
+    } else if(d.type==='end'){
+      const pct=(d.score*100).toFixed(1);
+      document.getElementById('fill').style.width=pct+'%';
+      document.getElementById('score-val').textContent=d.score.toFixed(3);
+      addLine('<br>');
+      addLine('<span class="th">══ RESULT ════════════════════════════════</span>');
+      let msg,cls;
+      if(d.score>=0.8){msg='✅ EXCELLENT — Incident fully resolved!';cls='tg';}
+      else if(d.score>=0.5){msg='⚡ PARTIAL — Incident partially mitigated';cls='tw';}
+      else{msg='❌ FAILED — Incident not resolved';cls='tr';}
+      addLine('<span class="'+cls+'" style="font-weight:700">'+msg+'</span>');
+      addLine('<span class="to">Final Score: '+d.score.toFixed(3)+' / 1.000</span>');
+      es.close();running=false;btn.disabled=false;
+      btn.textContent='🔁 Run Again';
+      document.getElementById('step-lbl').textContent='Done | Score: '+d.score.toFixed(3);
+    }
+  };
+
+  es.onerror=function(){
+    addLine('<span class="tr">Connection error. The environment may still be starting up.</span>');
+    es.close();running=false;btn.disabled=false;btn.textContent='🤖 Watch AI Solve This';
+  };
+}
+</script>
+</body>
+</html>

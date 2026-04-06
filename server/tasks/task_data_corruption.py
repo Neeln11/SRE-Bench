@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional, Tuple
 
-from environment import Action, CommandType, IncidentEnv
+from ..environment import Action, CommandType, IncidentEnv
 
 
 INITIAL_SERVICES = [

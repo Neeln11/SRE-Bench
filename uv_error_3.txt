@@ -1,0 +1,63 @@
+﻿python : DEBUG uv 0.11.3 
+(45da18ac3 2026-04-01 
+x86_64-pc-windows-msvc)
+At line:1 char:1
++ python -m uv lock 
+--verbose 2>&1 | Out-File 
+-FilePath uv_error_3.txt  
+...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (D  
+  EBUG uv 0.11.3...c-wi   
+ ndows-msvc):String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+DEBUG Found workspace 
+root: `C:\Users\neelv\.gem
+ini\antigravity\scratch\sr
+e-bench`
+DEBUG No Python version 
+file found in workspace: C
+:\Users\neelv\.gemini\anti
+gravity\scratch\sre-bench
+DEBUG Using Python 
+request `>=3.11` from 
+`requires-python` metadata
+DEBUG Checking for Python 
+environment at: `.venv`
+DEBUG Using request 
+connect timeout of 10s 
+and read timeout of 30s
+DEBUG Searching for 
+Python >=3.11 in managed 
+installations, search 
+path, or registry
+DEBUG Found `cpython-3.14.
+3-windows-x86_64-none` at 
+`C:\Program Files\Python31
+4\python.exe` (parent 
+interpreter)
+Using CPython 3.14.3 
+interpreter at: 
+C:\Program 
+Files\Python314\python.exe
+DEBUG Using request 
+connect timeout of 10s 
+and read timeout of 30s
+DEBUG Found static 
+`pyproject.toml` for: 
+sre-bench @ file:///C:/Use
+rs/neelv/.gemini/antigravi
+ty/scratch/sre-bench
+DEBUG No workspace root 
+found, using project root
+DEBUG Existing `uv.lock` 
+satisfies workspace 
+requirements
+Resolved 114 packages in 
+1ms

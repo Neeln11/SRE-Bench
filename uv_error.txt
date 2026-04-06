@@ -1,0 +1,944 @@
+﻿python : DEBUG uv 0.11.3 
+(45da18ac3 2026-04-01 
+x86_64-pc-windows-msvc)
+At line:1 char:1
++ python -m uv lock 
+--verbose 2>&1 | Out-File 
+-FilePath uv_error.txt -E 
+...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (D  
+  EBUG uv 0.11.3...c-wi   
+ ndows-msvc):String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+DEBUG Found workspace 
+root: `C:\Users\neelv\.gem
+ini\antigravity\scratch\sr
+e-bench`
+DEBUG No Python version 
+file found in workspace: C
+:\Users\neelv\.gemini\anti
+gravity\scratch\sre-bench
+DEBUG Using Python 
+request `>=3.11` from 
+`requires-python` metadata
+DEBUG Checking for Python 
+environment at: `.venv`
+DEBUG Using request 
+connect timeout of 10s 
+and read timeout of 30s
+DEBUG Searching for 
+Python >=3.11 in managed 
+installations, search 
+path, or registry
+DEBUG Found `cpython-3.14.
+3-windows-x86_64-none` at 
+`C:\Program Files\Python31
+4\python.exe` (parent 
+interpreter)
+Using CPython 3.14.3 
+interpreter at: 
+C:\Program 
+Files\Python314\python.exe
+DEBUG Using request 
+connect timeout of 10s 
+and read timeout of 30s
+DEBUG Found static 
+`pyproject.toml` for: 
+sre-bench @ file:///C:/Use
+rs/neelv/.gemini/antigravi
+ty/scratch/sre-bench
+DEBUG No workspace root 
+found, using project root
+DEBUG Solving with 
+installed Python version: 
+3.14.3
+DEBUG Solving with target 
+Python version: >=3.11
+DEBUG Adding direct 
+dependency: sre-bench*
+DEBUG Searching for a 
+compatible version of 
+sre-bench @ file:///C:/Use
+rs/neelv/.gemini/antigravi
+ty/scratch/sre-bench (*)
+DEBUG Adding direct 
+dependency: 
+fastapi>=0.111.0
+DEBUG Adding direct 
+dependency: gradio*
+DEBUG Adding direct 
+dependency: openai>=1.30.1
+DEBUG Adding direct 
+dependency: openenv>=0.2.0
+DEBUG Adding direct 
+dependency: 
+pydantic>=2.7.1
+DEBUG Adding direct 
+dependency: 
+requests>=2.32.3
+DEBUG Adding direct 
+dependency: 
+uvicorn>=0.30.1
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/openenv/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/fastapi/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/openai/
+DEBUG Searching for a 
+compatible version of 
+fastapi (>=0.111.0)
+DEBUG Selecting: 
+fastapi==0.135.3 
+[compatible] (fastapi-0.13
+5.3-py3-none-any.whl)
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/requests/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/uvicorn/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/gradio/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/pydantic/
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/84/a4/5caa2de7f917a04ada
+20018eccf60d6cc6145b0199d5
+5ca3711b0fc08312/fastapi-0
+.135.3-py3-none-any.whl.me
+tadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/2a/9e/5bfa2270f902d5b92a
+b7d41ce0475b8630572e71e349
+b2a4996d14bdda93/openai-2.
+30.0-py3-none-any.whl.meta
+data
+DEBUG Adding transitive 
+dependency for 
+fastapi==0.135.3: 
+annotated-doc>=0.0.2
+DEBUG Adding transitive 
+dependency for 
+fastapi==0.135.3: 
+pydantic>=2.9.0
+DEBUG Adding transitive 
+dependency for 
+fastapi==0.135.3: 
+starlette>=0.46.0
+DEBUG Adding transitive 
+dependency for 
+fastapi==0.135.3: 
+typing-extensions>=4.8.0
+DEBUG Adding transitive 
+dependency for 
+fastapi==0.135.3: 
+typing-inspection>=0.4.2
+DEBUG Searching for a 
+compatible version of 
+gradio (*)
+DEBUG Selecting: 
+gradio==6.11.0 
+[compatible] (gradio-6.11.
+0-py3-none-any.whl)
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/d7/8e/7540e8a2036f79a125
+c1d2ebadf69ed7901608859186
+c856fa0388ef4197/requests-
+2.33.1-py3-none-any.whl.me
+tadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/b7/23/a5bbd9600dd607411f
+a644c06ff4951bec3a4d82c4b8
+52374024359c19c0/uvicorn-0
+.44.0-py3-none-any.whl.met
+adata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/f1/5b/c816b9dd76a2e5e502
+aa25833c43cc00574c2579c0db
+84e79e93c5d13c4c/gradio-6.
+11.0-py3-none-any.whl.meta
+data
+DEBUG Pre-fork all marker 
+environments took 0.007s
+DEBUG Splitting 
+resolution on 
+gradio==6.11.0 over 
+audioop-lts into 2 
+resolutions with separate 
+markers
+DEBUG Narrowed 
+`requires-python` bound 
+to: >=3.11, <3.13
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+aiofiles>=22.0, <25.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+anyio>=3.0, <5.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+brotli>=1.1.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+fastapi>=0.115.2, <1.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: ffmpy*
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+gradio-client>=2.4.0, 
+<2.4.0+
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+groovy>=0.1, <1.dev0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+hf-gradio>=0.3.0, <1.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+httpx>=0.24.1, <1.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+huggingface-hub>=0.33.5, 
+<2.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: jinja2<4.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+markupsafe>=2.0, <4.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+numpy>=1.0, <3.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+orjson>=3.0, <4.dev0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: packaging*
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+pandas>=1.0, <4.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+pillow>=8.0, <13.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+pydantic>=2.0, <=3.0+
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: pydub*
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+python-multipart>=0.0.18
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+pytz>=2017.2
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+pyyaml>=5.0, <7.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+safehttpx>=0.1.7, <0.2.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+semantic-version>=2.0, 
+<3.dev0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+starlette>=0.40.0, <2.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+tomlkit>=0.12.0, <0.14.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+typer>=0.12, <1.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+typing-extensions>=4.0, 
+<5.dev0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+uvicorn>=0.14.0
+DEBUG Narrowed 
+`requires-python` bound 
+to: >=3.13
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+aiofiles>=22.0, <25.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+anyio>=3.0, <5.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: audioop-lt
+s{python_full_version >= 
+'3.13'}<1.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+brotli>=1.1.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+fastapi>=0.115.2, <1.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: ffmpy*
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+gradio-client>=2.4.0, 
+<2.4.0+
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+groovy>=0.1, <1.dev0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+hf-gradio>=0.3.0, <1.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+httpx>=0.24.1, <1.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+huggingface-hub>=0.33.5, 
+<2.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: jinja2<4.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+markupsafe>=2.0, <4.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+numpy>=1.0, <3.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+orjson>=3.0, <4.dev0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: packaging*
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+pandas>=1.0, <4.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+pillow>=8.0, <13.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+pydantic>=2.0, <=3.0+
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: pydub*
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+python-multipart>=0.0.18
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+pytz>=2017.2
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+pyyaml>=5.0, <7.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+safehttpx>=0.1.7, <0.2.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+semantic-version>=2.0, 
+<3.dev0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+starlette>=0.40.0, <2.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+tomlkit>=0.12.0, <0.14.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+typer>=0.12, <1.0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+typing-extensions>=4.0, 
+<5.dev0
+DEBUG Adding transitive 
+dependency for 
+gradio==6.11.0: 
+uvicorn>=0.14.0
+DEBUG Solving split 
+(markers: 
+python_full_version >= 
+'3.13') (requires-python: 
+RequiresPython { 
+specifiers: VersionSpecifi
+ers([VersionSpecifier { 
+operator: 
+GreaterThanEqual, 
+version: "3.13" }]), 
+range: RequiresPythonRange
+(LowerBound(Included("3.13
+")), 
+UpperBound(Unbounded)) })
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/annotated-doc/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/typing-extensi
+ons/
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/5a/87/b70ad306ebb6f9b585
+f114d0ac2137d792b48be34d73
+2d60e597c2f8465a/pydantic-
+2.12.5-py3-none-any.whl.me
+tadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/1e/d3/26bf1008eb3d2daa8e
+f4cacc7f3bfdc11818d111f7e2
+d0201bc6e3b49d45/annotated
+_doc-0.0.4-py3-none-any.wh
+l.metadata
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/anyio/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/brotli/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/hf-gradio/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/jinja2/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/packaging/
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/b7/b9/c538f279a4e237a006
+a2c98387d081e9eb060d203d8e
+d34467cc0f0b9b53/packaging
+-26.0-py3-none-any.whl.met
+adata
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/markupsafe/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/huggingface-hu
+b/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/httpx/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/groovy/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/gradio-client/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/ffmpy/
+DEBUG Searching for a 
+compatible version of 
+gradio-client (>=2.4.0, 
+<2.4.0+)
+DEBUG Selecting: 
+gradio-client==2.4.0 
+[compatible] (gradio_clien
+t-2.4.0-py3-none-any.whl)
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/aiofiles/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/starlette/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/typing-inspect
+ion/
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/18/67/36e9267722cc04a6b9
+f15c7f3441c2363321a3ea07da
+7ae0c0707beb2a9c/typing_ex
+tensions-4.15.0-py3-none-a
+ny.whl.metadata
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/pytz/
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/62/a1/3d680cbfd5f4b8f15a
+bc1d571870c5fc3e594bb582bc
+3b64ea099db13e56/jinja2-3.
+1.6-py3-none-any.whl.metad
+ata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/73/37/0d15d16150e1829f3e
+90962c99f28257f6de9e526a68
+0b4c6f5acdb54fd2/huggingfa
+ce_hub-1.9.0-py3-none-any.
+whl.metadata
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/numpy/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/orjson/
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/da/42/e921fccf5015463e32
+a3cf6ee7f980a6ed0f395ceeaa
+45060b61d86486c2/anyio-4.1
+3.0-py3-none-any.whl.metad
+ata
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/typer/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/tomlkit/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/semantic-versi
+on/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/safehttpx/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/pyyaml/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/python-multipa
+rt/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/pydub/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/pillow/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/pandas/
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/2a/39/e50c7c3a983047577e
+e07d2a9e53faf5a69493943ec3
+f6a384bdc792deb2/httpx-0.2
+8.1-py3-none-any.whl.metad
+ata
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/audioop-lts/
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/4c/52/04816d2a15691a63ce
+c3187e3e592c4493448eb48344
+92eadd532972b035/hf_gradio
+-0.3.0-py3-none-any.whl.me
+tadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/7a/ef/f285668811a9e1ddb4
+7a18cb0b437d5fc2760d537a2f
+e8a57875ad6f8448/brotli-1.
+2.0-cp311-cp311-macosx_10_
+9_universal2.whl.metadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/08/db/fefacb2136439fc8dd
+20e797950e749aa1f4997ed584
+c62cfb8ef7c2be0e/markupsaf
+e-3.0.3-cp311-cp311-macosx
+_10_9_x86_64.whl.metadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/28/27/3d6dcadc8a3214d852
+2c1e7f6a19554e33659be44546
+d44a2f7572ac7d2a/groovy-0.
+1.2-py3-none-any.whl.metad
+ata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/f0/b3/10cb03cf684aab2bec
+97cb0b9bbba4f93e7a20c6e0f3
+b4100c235a55ad93/gradio_cl
+ient-2.4.0-py3-none-any.wh
+l.metadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/55/56/dd3669eccebb6d8ac8
+1e624542ebd53fe6f08e1b8f2f
+8d50aeb7e3b83f99/ffmpy-1.0
+.0-py3-none-any.whl.metada
+ta
+DEBUG Adding transitive 
+dependency for 
+gradio-client==2.4.0: 
+fsspec*
+DEBUG Adding transitive 
+dependency for 
+gradio-client==2.4.0: 
+httpx>=0.24.1
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/a5/45/30bb92d442636f570c
+b5651bc661f52b610e2eec3f89
+1a5dc3a4c3667db0/aiofiles-
+24.1.0-py3-none-any.whl.me
+tadata
+DEBUG Adding transitive 
+dependency for 
+gradio-client==2.4.0: 
+huggingface-hub>=0.19.3, 
+<2.0
+DEBUG Adding transitive 
+dependency for 
+gradio-client==2.4.0: 
+packaging*
+DEBUG Adding transitive 
+dependency for 
+gradio-client==2.4.0: 
+typing-extensions>=4.0, 
+<5.dev0
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/0b/c9/584bc9651441b4ba60
+cc4d557d8a547b5aff901af35b
+da3a4ee30c819b82/starlette
+-1.0.0-py3-none-any.whl.me
+tadata
+DEBUG Searching for a 
+compatible version of 
+openai (>=1.30.1)
+DEBUG Selecting: 
+openai==2.30.0 
+[compatible] (openai-2.30.
+0-py3-none-any.whl)
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/dc/9b/47798a6c91d8bdb567
+fe2698fe81e0c6b7cb7ef4d13d
+a4114b41d239f65d/typing_in
+spection-0.4.2-py3-none-an
+y.whl.metadata
+DEBUG Adding transitive 
+dependency for 
+openai==2.30.0: 
+anyio>=3.5.0, <5
+DEBUG Adding transitive 
+dependency for 
+openai==2.30.0: 
+distro>=1.7.0, <2
+DEBUG Adding transitive 
+dependency for 
+openai==2.30.0: 
+httpx>=0.23.0, <1
+DEBUG Adding transitive 
+dependency for 
+openai==2.30.0: 
+jiter>=0.10.0, <1
+DEBUG Adding transitive 
+dependency for 
+openai==2.30.0: 
+pydantic>=1.9.0, <3
+DEBUG Adding transitive 
+dependency for 
+openai==2.30.0: sniffio*
+DEBUG Adding transitive 
+dependency for 
+openai==2.30.0: tqdm>4
+DEBUG Adding transitive 
+dependency for 
+openai==2.30.0: 
+typing-extensions>=4.11, 
+<5
+DEBUG Adding transitive 
+dependency for 
+openai==2.30.0: 
+typing-extensions>=4.14, 
+<5
+DEBUG Searching for a 
+compatible version of 
+openenv (>=0.2.0)
+DEBUG No compatible 
+version found for: openenv
+DEBUG Recording unit 
+propagation conflict of 
+openenv from 
+incompatibility of 
+(sre-bench)
+DEBUG Searching for a 
+compatible version of 
+sre-bench @ file:///C:/Use
+rs/neelv/.gemini/antigravi
+ty/scratch/sre-bench 
+(<1.0.0 | >1.0.0)
+DEBUG No compatible 
+version found for: 
+sre-bench
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/6d/16/a95b6757765b7b031c
+9374925bb718d55e0a9ba8a1b6
+a12d25962ea44347/pyyaml-6.
+0.3-cp311-cp311-macosx_10_
+13_x86_64.whl.metadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/10/99/781fe0c827be2742bc
+c775efefccb3b048a3a9c6ce9a
+ec0cbf4a101677e5/pytz-2026
+.1.post1-py2.py3-none-any.
+whl.metadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/97/35/6411db530c618e0e00
+05187e35aa02ce60ae4c4c4d20
+6964a2f978217c27/pandas-3.
+0.2-cp311-cp311-macosx_10_
+9_x86_64.whl.metadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/ef/c6/4218570d8c8ecc9704
+b5157a3348e486e84ef4be0ed3
+e38218ab473c83d2/numpy-2.4
+.4-cp311-cp311-macosx_10_9
+_x86_64.whl.metadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/67/41/5aa7fa3b0f4dc6b47d
+cafc3cea909299c37e40e9972f
+eabc8b6a74e2730d/orjson-3.
+11.8-cp311-cp311-macosx_10
+_15_x86_64.macosx_11_0_arm
+64.macosx_10_15_universal2
+.whl.metadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/4a/91/48db081e7a63bb3728
+4f9fbcefda7c44c277b18b0e13
+fbc36ea2335b71e6/typer-0.2
+4.1-py3-none-any.whl.metad
+ata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/6a/23/8146aad7d88f4fcb3a
+6218f41a60f6c2d4e3a72de72d
+a1825dc7c8f7877c/semantic_
+version-2.10.0-py2.py3-non
+e-any.whl.metadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/bd/75/8539d011f6be8e29f3
+39c42e633aae3cb73bffa95dd0
+f9adec09b9c58e85/tomlkit-0
+.13.3-py3-none-any.whl.met
+adata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/2e/a3/0f0b7d78e2f1eb9e8e
+1afbff1d2bff8d60144aee17ac
+a51c065b516743dd/safehttpx
+-0.1.7-py3-none-any.whl.me
+tadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/de/d4/94d277ca941de5a507
+b07f0b592f199c22454eeaec8f
+008a286b3fbbacd6/audioop_l
+ts-0.2.2-cp313-abi3-macosx
+_10_13_universal2.whl.meta
+data
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/68/e1/748f5663efe6edcfc4
+e74b2b93edfb9b8b99b67f21a8
+54c3ae416500a2d9/pillow-12
+.2.0-cp311-cp311-macosx_10
+_10_x86_64.whl.metadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/a6/53/d78dc063216e62fc55
+f6b2eebb447f6a4b0a59f55c84
+06376f76bf959b08/pydub-0.2
+5.1-py2.py3-none-any.whl.m
+etadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/a3/73/89930efabd4da63cea
+44a3f438aeb753d600123570e6
+d6264e763617a9ce/python_mu
+ltipart-0.0.24-py3-none-an
+y.whl.metadata
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/fsspec/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/distro/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/sniffio/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/tqdm/
+DEBUG Found fresh 
+response for: https://pypi
+.org/simple/jiter/
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/d5/1f/5f4a3cd9e4440e9d9b
+c78ad0a91a1c8d46b4d429d523
+9ebe6793c9fe5c41/fsspec-20
+26.3.0-py3-none-any.whl.me
+tadata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/12/b3/231ffd4ab1fc9d6798
+09f356cebee130ac7daa00d6d6
+f3206dd4fd137e9e/distro-1.
+9.0-py3-none-any.whl.metad
+ata
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/16/e1/3079a9ff9b8e11b846
+c6ac5c8b5bfb7ff225eee72182
+5310c91b3b50304f/tqdm-4.67
+.3-py3-none-any.whl.metada
+ta
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/e9/44/75a9c9421471a6c480
+5dbf2356f7c181a29c1879239a
+bab1ea2cc8f38b40/sniffio-1
+.3.1-py3-none-any.whl.meta
+data
+DEBUG Found fresh 
+response for: https://file
+s.pythonhosted.org/package
+s/71/29/499f8c9eaa8a16751b
+1c0e45e6f5f1761d180da873d4
+17996cc7bddc8eef/jiter-0.1
+3.0-cp311-cp311-macosx_10_
+12_x86_64.whl.metadata
+  ├ù No solution found 
+when resolving 
+dependencies for split 
+(markers:
+  Γöé python_full_version 
+>= '3.13'):
+  Γò░ΓöÇΓû╢ Because only 
+openenv<=0.1.13 is 
+available and your 
+project depends on
+      openenv>=0.2.0, we 
+can conclude that your 
+project's requirements are
+      unsatisfiable.

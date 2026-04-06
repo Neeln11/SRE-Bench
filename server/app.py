@@ -16,10 +16,19 @@ from fastapi.responses import HTMLResponse, StreamingResponse
 from pydantic import BaseModel
 
 import gradio as gr
-from environment import Action, Observation, Reward
-from graders import grade_task
-from tasks import TASK_REGISTRY
-from app import demo
+from .environment import Action, Observation, Reward
+from .graders import grade_task
+from .tasks import TASK_REGISTRY
+
+# app.py is still at the root. We need to import the 'demo' from it.
+# If we run with 'python -m server.app', the root directory is in sys.path.
+try:
+    from app import demo
+except ImportError:
+    import sys
+    import os
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+    from app import demo
 
 app = FastAPI(
     title="SRE-Bench: Incident Response Environment",

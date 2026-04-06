@@ -1,0 +1,115 @@
+spec_version: "1.0"
+name: "SRE-Bench"
+version: "1.0.0"
+description: >
+  An OpenEnv environment where an AI agent acts as an on-call Site Reliability Engineer.
+  The agent is presented with a live production incident and must read logs, run diagnostics,
+  identify the root cause, and apply the correct fix — all through a structured terminal API.
+  Designed to benchmark multi-step reasoning, cross-source correlation, and safe remediation.
+
+author: "SRE-Bench"
+tags:
+  - openenv
+  - sre
+  - incident-response
+  - reasoning
+  - production-systems
+
+tasks:
+  - id: disk_full
+    difficulty: easy
+    max_steps: 15
+    description: >
+      The API service is degraded (45% error rate, 4.2s p99 latency).
+      Root cause: a 40GB rotated log file has filled the disk to 100%.
+      Agent must check disk metrics, read the application log, identify
+      the culprit file, and delete it to restore service health.
+    success_threshold: 0.8
+
+  - id: db_pool_exhausted
+    difficulty: medium
+    max_steps: 15
+    description: >
+      API p99 latency is 8.1 seconds and error rate is 38%.
+      Root cause: the auth service leaks DB connections on failed logins,
+      exhausting the shared connection pool after ~50 minutes.
+      Agent must correlate the API log, DB metrics, and auth log to
+      identify the connection leak, then apply the correct targeted fix.
+    success_threshold: 0.7
+
+  - id: data_corruption
+    difficulty: hard
+    max_steps: 15
+    description: >
+      A low-priority alert: finance team reports duplicate invoices.
+      No service errors. No latency alerts. Root cause: a bad deploy
+      pushed a serializer bug that corrupts item_id fields. Orders service
+      appears healthy, but fulfillment silently drops corrupted rows while
+      finance double-bills. Agent must trace the cascading failure across
+      three service logs and the deploy history, rollback the config change,
+      and trigger reprocessing of affected orders WITHOUT wiping valid data.
+      Destructive actions are heavily penalised (-0.50).
+    success_threshold: 0.6
+
+observation_space:
+  type: object
+  properties:
+    terminal_output:
+      type: string
+      description: Output from the last command executed
+    services:
+      type: array
+      description: List of service health objects (name, status, error_rate, latency_p99_ms)
+    step:
+      type: integer
+      description: Current step number (0-indexed)
+    sla_remaining:
+      type: integer
+      description: Steps remaining before SLA breach (starts at 12)
+    incident_description:
+      type: string
+      description: Initial incident alert as seen by the on-call engineer
+    last_command_error:
+      type: string
+      nullable: true
+      description: Error message if last command was invalid, null otherwise
+
+action_space:
+  type: object
+  properties:
+    command:
+      type: string
+      enum:
+        - read_log
+        - check_metrics
+        - run_diagnostic
+        - apply_fix
+        - rollback
+        - restart_service
+        - escalate
+      description: The terminal command to execute
+    params:
+      type: object
+      description: >
+        Command parameters. Examples:
+          read_log:        {"service": "api"}
+          check_metrics:   {"target": "disk"}
+          run_diagnostic:  {"type": "deploy_history"}
+          apply_fix:       {"fix_type": "delete_log", "target": "/var/log/app/app.log.2024-01-14"}
+          rollback:        {"service": "orders"}
+          restart_service: {"service": "auth"}
+
+reward:
+  type: float
+  range: [0.0, 1.0]
+  description: >
+    Per-step reward with multiple components:
+      +0.05–0.10  running correct diagnostic commands
+      +0.10–0.20  identifying affected services / reading relevant logs
+      +0.20–0.30  identifying root cause
+      +0.20–0.30  applying the correct fix
+      +0.20       service health fully restored
+      +0.05       SLA bonus for fast resolution
+      -0.05       wrong fix attempted (no data loss)
+      -0.30       destructive action on wrong target
+      -0.50       permanent data loss

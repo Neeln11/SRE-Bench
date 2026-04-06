@@ -1,20 +1,28 @@
 FROM python:3.11-slim
 
+# Install uv for dependency management
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
 WORKDIR /app
 
-# Install dependencies first (layer cache)
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Enable bytecode compilation
+ENV UV_COMPILE_BYTECODE=1
 
-# Copy source
+# Copy metadata for caching
+COPY pyproject.toml uv.lock ./
+
+# Install dependencies using uv
+RUN uv sync --frozen --no-install-project --no-dev
+
+# Copy the rest of the source
 COPY . .
 
 # HuggingFace Spaces uses port 7860
 EXPOSE 7860
 
-# Healthcheck against Gradio (port 7860)
+# Healthcheck against consolidated app (port 7860)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
-  CMD python -c "import requests; requests.get('http://localhost:7860/', timeout=5)"
+  CMD python -c "import requests; requests.get('http://localhost:7860/health', timeout=5)"
 
-# Entry point is main.py (launches FastAPI + Gradio on 7860)
-CMD ["python", "main.py"]
+# Entry point using the server script (FastAPI + Gradio)
+CMD ["uv", "run", "server"]

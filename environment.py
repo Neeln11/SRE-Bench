@@ -41,7 +41,7 @@ class Action(BaseModel):
 class ServiceStatus(BaseModel):
     name: str
     status: str          # "healthy" | "degraded" | "down"
-    error_rate: float    # 0.0 – 1.0
+    error_rate: float = Field(..., ge=1e-5, le=0.99999)    # Strictly (0, 1) exclusive
     latency_p99_ms: int
 
 
@@ -59,7 +59,7 @@ class Observation(BaseModel):
 # ---------------------------------------------------------------------------
 
 class Reward(BaseModel):
-    value: float = Field(..., gt=0.0, lt=1.0)
+    value: float = Field(..., ge=1e-5, le=0.99999)
     breakdown: Dict[str, float] = Field(default_factory=dict)
     done: bool = False
     info: Dict[str, Any] = Field(default_factory=dict)
@@ -92,7 +92,7 @@ class IncidentEnv:
     def reset(self) -> Observation:
         """Return a fresh initial observation."""
         self._step_count = 0
-        self._episode_reward = 1e-6
+        self._episode_reward = 1e-5
         self._done = False
         self._state = self._build_initial_state()
         return self._build_observation("Incident detected. Terminal ready.")
@@ -108,7 +108,7 @@ class IncidentEnv:
         reward_value, breakdown = self._compute_reward(action, terminal_output)
 
         # Clip cumulative so it stays strictly in (0, 1)
-        eps = 1e-6
+        eps = 1e-5
         self._episode_reward = min(1.0 - eps, max(eps, self._episode_reward + reward_value))
 
         resolved  = self._state.get("resolved", False)
@@ -117,15 +117,18 @@ class IncidentEnv:
 
         obs = self._build_observation(terminal_output, error)
         # Strictly between 0 and 1 (exclusive)
-        eps = 1e-6
+        eps = 1e-5
         def clamp(v): return float(max(eps, min(1.0 - eps, v)))
 
         final_reward = clamp(reward_value + (0.05 if resolved else 0.0))
         clamped_cumulative = clamp(self._episode_reward)
 
+        # Sanitize breakdown: ensure no 0.0 or negative values exist
+        clean_breakdown = {k: float(max(eps, min(1.0 - eps, v))) for k, v in breakdown.items()}
+
         reward = Reward(
             value=final_reward,
-            breakdown=breakdown,
+            breakdown=clean_breakdown,
             done=self._done,
             info={
                 "resolved": resolved,

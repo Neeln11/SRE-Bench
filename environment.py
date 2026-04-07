@@ -59,7 +59,7 @@ class Observation(BaseModel):
 # ---------------------------------------------------------------------------
 
 class Reward(BaseModel):
-    value: float = Field(..., ge=1e-5, le=0.99999)
+    value: float = Field(..., ge=1e-5, le=0.99999)  # strictly (0, 1) exclusive
     breakdown: Dict[str, float] = Field(default_factory=dict)
     done: bool = False
     info: Dict[str, Any] = Field(default_factory=dict)
@@ -82,7 +82,7 @@ class IncidentEnv:
         self.task_id = task_id
         self._state: Dict[str, Any] = {}
         self._step_count: int = 0
-        self._episode_reward: float = 1e-6
+        self._episode_reward: float = 1e-5  # start strictly above 0
         self._done: bool = False
 
     # ------------------------------------------------------------------
@@ -99,16 +99,18 @@ class IncidentEnv:
 
     def step(self, action: Action) -> Tuple[Observation, Reward, bool, Dict]:
         """Execute one action and return (obs, reward, done, info)."""
+        eps = 1e-5
+
         if self._done:
             obs = self._build_observation("Episode already finished.")
-            return obs, Reward(value=1e-6, done=True), True, {}
+            # FIX: use 1e-5 not 1e-6 — must satisfy ge=1e-5
+            return obs, Reward(value=eps, done=True), True, {}
 
         self._step_count += 1
         terminal_output, error = self._execute_command(action)
         reward_value, breakdown = self._compute_reward(action, terminal_output)
 
         # Clip cumulative so it stays strictly in (0, 1)
-        eps = 1e-5
         self._episode_reward = min(1.0 - eps, max(eps, self._episode_reward + reward_value))
 
         resolved  = self._state.get("resolved", False)
@@ -116,15 +118,14 @@ class IncidentEnv:
         self._done = resolved or timed_out
 
         obs = self._build_observation(terminal_output, error)
-        # Strictly between 0 and 1 (exclusive)
-        eps = 1e-5
+
         def clamp(v): return float(max(eps, min(1.0 - eps, v)))
 
-        final_reward = clamp(reward_value + (0.05 if resolved else 0.0))
+        final_reward       = clamp(reward_value + (0.05 if resolved else 0.0))
         clamped_cumulative = clamp(self._episode_reward)
 
         # Sanitize breakdown: ensure no 0.0 or negative values exist
-        clean_breakdown = {k: float(max(eps, min(1.0 - eps, v))) for k, v in breakdown.items()}
+        clean_breakdown = {k: clamp(v) for k, v in breakdown.items()}
 
         reward = Reward(
             value=final_reward,

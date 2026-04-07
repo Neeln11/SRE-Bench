@@ -1,29 +1,22 @@
 FROM python:3.11-slim
 
-# Install uv for dependency management
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-
 WORKDIR /app
 
-# Enable bytecode compilation
-ENV UV_COMPILE_BYTECODE=1
+# Copy requirements file first for layer caching
+COPY requirements.txt .
 
-# Copy metadata for caching
-COPY pyproject.toml uv.lock ./
+# Install dependencies globally via pip for compatibility with all scripts
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install dependencies using uv
-RUN uv sync --frozen --no-install-project --no-dev
-
-# Copy the rest of the source
+# Copy the rest of the source code
 COPY . .
 
 # HuggingFace Spaces uses port 7860
 EXPOSE 7860
 
-# Healthcheck against consolidated app (port 7860)
-# We use uv run to ensure we use the virtualenv
+# Healthcheck
 HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
-  CMD uv run python -c "import requests; requests.get('http://localhost:7860/health', timeout=5)"
+  CMD python -c "import requests; requests.get('http://localhost:7860/health', timeout=5)"
 
-# Entry point using uv run to ensure the virtualenv is active
-CMD ["uv", "run", "python", "main.py"]
+# Entry point
+CMD ["python", "main.py"]

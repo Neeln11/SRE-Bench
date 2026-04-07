@@ -17,7 +17,7 @@ from environment import Action, CommandType, IncidentEnv
 INITIAL_SERVICES = [
     {"name": "orders",      "status": "healthy",  "error_rate": 0.01, "latency_p99_ms": 95},
     {"name": "fulfillment", "status": "healthy",  "error_rate": 0.02, "latency_p99_ms": 220},
-    {"name": "finance",     "status": "healthy",  "error_rate": 1e-5, "latency_p99_ms": 180},
+    {"name": "finance",     "status": "healthy",  "error_rate": 0.01, "latency_p99_ms": 180},
     {"name": "api",         "status": "healthy",  "error_rate": 0.01, "latency_p99_ms": 140},
 ]
 

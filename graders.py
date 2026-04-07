@@ -9,11 +9,16 @@ from __future__ import annotations
 from typing import Any, Dict
 
 
+# Score must be strictly within (0, 1) — use 0.01 as floor and 0.99 as ceiling
+# so no validator can misinterpret the value as 0.0 or 1.0.
+SCORE_MIN = 0.01
+SCORE_MAX = 0.99
+
+
 class BaseGrader:
     def clamp_score(self, score: float) -> float:
-        """Strictly between 0 and 1 (exclusive)."""
-        eps = 1e-5
-        return float(max(eps, min(1.0 - eps, score)))
+        """Strictly between 0 and 1 (exclusive). Clamped to [0.01, 0.99]."""
+        return float(max(SCORE_MIN, min(SCORE_MAX, score)))
 
     def grade(self, state: Dict[str, Any]) -> float:
         raise NotImplementedError
@@ -37,7 +42,7 @@ class DiskFullGrader(BaseGrader):
     """
 
     def grade(self, state: Dict[str, Any]) -> float:
-        score = 1e-5
+        score = SCORE_MIN
 
         if state.get("disk_checked"):
             score += 0.10
@@ -79,7 +84,7 @@ class DBPoolGrader(BaseGrader):
     """
 
     def grade(self, state: Dict[str, Any]) -> float:
-        score = 1e-5
+        score = SCORE_MIN
 
         if state.get("api_log_read"):
             score += 0.05
@@ -130,7 +135,7 @@ class DataCorruptionGrader(BaseGrader):
     """
 
     def grade(self, state: Dict[str, Any]) -> float:
-        score = 1e-5
+        score = SCORE_MIN
 
         if state.get("orders_log_read"):
             score += 0.07
@@ -156,7 +161,7 @@ class DataCorruptionGrader(BaseGrader):
         if state.get("wrong_fix_attempted"):
             score -= 0.05
 
-        score = max(1e-5, score)
+        score = max(SCORE_MIN, score)
         return self.clamp_score(score)
 
 

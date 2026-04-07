@@ -14,7 +14,7 @@ from environment import Action, CommandType, IncidentEnv
 INITIAL_SERVICES = [
     {"name": "api",      "status": "degraded", "error_rate": 0.45, "latency_p99_ms": 4200},
     {"name": "database", "status": "healthy",  "error_rate": 0.01, "latency_p99_ms": 120},
-    {"name": "auth",     "status": "healthy",  "error_rate": 1e-5, "latency_p99_ms": 80},
+    {"name": "auth",     "status": "healthy",  "error_rate": 0.01, "latency_p99_ms": 80},
 ]
 
 DISK_METRICS = """\

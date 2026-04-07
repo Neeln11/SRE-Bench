@@ -156,7 +156,7 @@ def run_task(task_id: str) -> None:
     rewards: List[str] = []
     step = 0
     done = False
-    final_score = 1e-5
+    final_score = 0.01
 
     print(f"[START] task={task_id} env=sre-bench model={MODEL_NAME}", flush=True)
 
@@ -191,8 +191,7 @@ def run_task(task_id: str) -> None:
                 terminal    = result["observation"]["terminal_output"]
                 error       = result["observation"].get("last_command_error")
                 raw         = result.get("final_score")
-                eps         = 1e-5
-                final_score = float(max(eps, min(1.0 - eps, raw))) if raw is not None else eps
+                final_score = float(max(0.01, min(0.99, raw))) if raw is not None else 0.01
                 step += 1
 
                 rewards.append(f"{reward_val:.6f}")
@@ -239,8 +238,8 @@ def run_task(task_id: str) -> None:
         )
 
     except Exception as e:
-        final_score = 1e-5
-        default_rew = ",".join(["0.000010"] * max(1, step))
+        final_score = 0.01
+        default_rew = ",".join(["0.010000"] * max(1, step))
         print(
             f"[END] success=false steps={step} score={final_score:.6f} rewards={default_rew}",
             flush=True,

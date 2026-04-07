@@ -85,7 +85,7 @@ class StepResponse(BaseModel):
     reward: Reward
     done: bool
     info: Dict[str, Any]
-    final_score: Optional[float] = 1e-6
+    final_score: Optional[float] = Field(1e-5, ge=1e-5, le=0.99999)
 
 
 class GradeRequest(BaseModel):
@@ -155,8 +155,8 @@ async def stream_solve(task_id: str, request: Request):
 
         score = grade_task(task_id, env.state())
         # Global Safety Net: strict (0, 1)
-        eps = 1e-6
-        score = float(max(eps, min(1.0 - eps, score)))
+        epsilon = 1e-5
+        score = float(max(epsilon, min(1.0 - epsilon, score)))
         yield f"data: {_json.dumps({'type': 'end', 'score': score})}\n\n"
 
     return StreamingResponse(
@@ -225,11 +225,11 @@ def step(req: StepRequest = None):
             detail=f"Session '{req.session_id}' not found. Call /reset first.",
         )
     obs, reward, done, info = env.step(req.action)
-    final_score = 1e-6
+    final_score = 1e-5
     if done:
         final_score = grade_task(env.task_id, env.state())
         # Global Safety Net: strict (0, 1)
-        eps = 1e-6
+        eps = 1e-5
         final_score = float(max(eps, min(1.0 - eps, final_score)))
         info["final_score"] = final_score
         
@@ -261,7 +261,7 @@ def grade(req: GradeRequest = GradeRequest()):
         raise HTTPException(status_code=404, detail="Session not found.")
     score = grade_task(env.task_id, env.state())
     # Global Safety Net: strict (0, 1)
-    eps = 1e-6
+    eps = 1e-5
     score = float(max(eps, min(1.0 - eps, score)))
     return {"task_id": env.task_id, "score": score}
 

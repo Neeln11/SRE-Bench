@@ -12,7 +12,7 @@ from typing import Any, Dict
 class BaseGrader:
     def clamp_score(self, score: float) -> float:
         """Strictly between 0 and 1 (exclusive)."""
-        epsilon = 1e-6
+        epsilon = 1e-5
         return float(max(epsilon, min(1.0 - epsilon, score)))
 
     def grade(self, state: Dict[str, Any]) -> float:
@@ -37,7 +37,7 @@ class DiskFullGrader(BaseGrader):
     """
 
     def grade(self, state: Dict[str, Any]) -> float:
-        score = 1e-6
+        score = 1e-5
 
         if state.get("disk_checked"):
             score += 0.10
@@ -79,7 +79,7 @@ class DBPoolGrader(BaseGrader):
     """
 
     def grade(self, state: Dict[str, Any]) -> float:
-        score = 1e-6
+        score = 1e-5
 
         if state.get("api_log_read"):
             score += 0.05
@@ -130,7 +130,7 @@ class DataCorruptionGrader(BaseGrader):
     """
 
     def grade(self, state: Dict[str, Any]) -> float:
-        score = 1e-6
+        score = 1e-5
 
         if state.get("orders_log_read"):
             score += 0.07
@@ -156,7 +156,7 @@ class DataCorruptionGrader(BaseGrader):
         if state.get("wrong_fix_attempted"):
             score -= 0.05
 
-        score = max(1e-6, score)
+        score = max(1e-5, score)
         return self.clamp_score(score)
 
 

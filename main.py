@@ -227,9 +227,8 @@ def step(req: StepRequest = None):
     obs, reward, done, info = env.step(req.action)
     final_score = 1e-5
     if done:
-        final_score = grade_task(env.task_id, env.state())
-        # Global Safety Net: strict (0, 1)
         eps = 1e-5
+        final_score = env.state().get("cumulative_reward", 0.05 if done else eps)
         final_score = float(max(eps, min(1.0 - eps, final_score)))
         info["final_score"] = final_score
         

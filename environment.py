@@ -142,7 +142,14 @@ class IncidentEnv:
 
     def state(self) -> Dict[str, Any]:
         """Return the full internal state (for graders and debugging)."""
-        return {**self._state, "step": self._step_count, "done": self._done}
+        eps = 1e-5
+        cumulative = float(max(eps, min(1.0 - eps, self._episode_reward)))
+        return {
+            **self._state,
+            "step": self._step_count,
+            "done": self._done,
+            "cumulative_reward": cumulative
+        }
 
     def close(self):
         pass

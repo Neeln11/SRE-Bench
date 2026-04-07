@@ -103,7 +103,7 @@ class IncidentEnv:
 
         if self._done:
             obs = self._build_observation("Episode already finished.")
-            # FIX: use 1e-5 not 1e-6 — must satisfy ge=1e-5
+            # FIX: use 1e-5 not 0.000001 — must satisfy ge=1e-5
             return obs, Reward(value=eps, done=True), True, {}
 
         self._step_count += 1

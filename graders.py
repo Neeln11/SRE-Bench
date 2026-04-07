@@ -50,7 +50,7 @@ class DiskFullGrader(BaseGrader):
 
         services = {s["name"]: s for s in state.get("services", [])}
         api = services.get("api", {})
-        if api.get("status") == "healthy" and api.get("error_rate", 1.0) < 0.05:
+        if api.get("status") == "healthy" and api.get("error_rate", 0.99999) < 0.05:
             score += 0.20
 
         wrong = 1 if state.get("wrong_fix_attempted") else 0

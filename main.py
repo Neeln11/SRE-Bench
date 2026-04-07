@@ -13,7 +13,7 @@ from typing import Any, Dict, Optional
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 import gradio as gr
 from environment import Action, Observation, Reward
@@ -30,7 +30,7 @@ def run_inference(task_id, hf_token, model_name, api_base):
     except Exception as e:
         return f"Error: {e}"
 
-with gr.Blocks(title="SRE-Bench Dashboard", css=".gradio-container {background-color: #f0f2f5}", theme="soft") as demo:
+with gr.Blocks(title="SRE-Bench Dashboard") as demo:
     gr.Markdown("# 🛠️ SRE-Bench: Incident Response Environment")
     with gr.Tab("Status"):
         gr.Markdown("### Service Health")
@@ -269,7 +269,15 @@ def grade(req: GradeRequest = GradeRequest()):
 # ---------------------------------------------------------------------------
 # Mount Gradio UI
 # ---------------------------------------------------------------------------
-app = gr.mount_gradio_app(app, demo, path="/")
+app = gr.mount_gradio_app(
+    app, 
+    demo, 
+    path="/",
+    gradio_api_url=None,
+    # These parameters moved from Blocks to launch/mount in Gradio 6.0
+    # Note: mount_gradio_app doesn't always support all launch() params, 
+    # but we will rely on the default theme if mount fails.
+)
 
 
 # ---------------------------------------------------------------------------

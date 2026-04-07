@@ -214,7 +214,7 @@ def run_task(task_id: str) -> None:
                     f"Terminal output:\n{terminal}\n\n"
                     f"Services:\n{services_str}\n\n"
                     f"Step: {step}/{MAX_STEPS}  SLA remaining: {sla}\n"
-                    f"Cumulative reward: {result['info'].get('cumulative_reward', 1e-6):.6f}\n"
+                    f"Cumulative reward: {result['info'].get('cumulative_reward', 1e-5):.6f}\n"
                 )
                 if done:
                     next_msg += f"\nEpisode finished. Final score: {final_score:.6f}"

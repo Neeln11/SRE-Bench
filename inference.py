@@ -234,7 +234,7 @@ def run_task(task_id: str) -> None:
         success = final_score >= SUCCESS_THRESHOLD
         print(
             f"[END] success={'true' if success else 'false'} "
-            f"steps={step} rewards={','.join(rewards)}",
+            f"steps={step} score={final_score:.6f} rewards={','.join(rewards)}",
             flush=True,
         )
 
@@ -242,7 +242,7 @@ def run_task(task_id: str) -> None:
         final_score = 1e-5
         default_rew = ",".join(["0.000010"] * max(1, step))
         print(
-            f"[END] success=false steps={step} rewards={default_rew}",
+            f"[END] success=false steps={step} score={final_score:.6f} rewards={default_rew}",
             flush=True,
         )
         raise

@@ -12,8 +12,8 @@ from typing import Any, Dict
 class BaseGrader:
     def clamp_score(self, score: float) -> float:
         """Strictly between 0 and 1 (exclusive)."""
-        epsilon = 1e-5
-        return float(max(epsilon, min(1.0 - epsilon, score)))
+        eps = 1e-5
+        return float(max(eps, min(1.0 - eps, score)))
 
     def grade(self, state: Dict[str, Any]) -> float:
         raise NotImplementedError

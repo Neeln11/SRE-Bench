@@ -101,7 +101,7 @@ action_space:
 
 reward:
   type: float
-  range: [0.0, 1.0]
+  range: (0.0, 1.0)
   description: >
     Per-step reward with multiple components:
       +0.05–0.10  running correct diagnostic commands

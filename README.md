@@ -134,7 +134,7 @@ Penalties:
   -0.50        Permanent data loss (hard task)
 ```
 
-All rewards are bounded to `[0.0, 1.0]`.
+All rewards are bounded strictly within `(0.0, 1.0)` — exclusive of both endpoints.
 
 ---
 

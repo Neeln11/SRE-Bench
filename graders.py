@@ -1,6 +1,6 @@
 """
 graders.py — Deterministic graders for all 3 tasks.
-Each grader inspects the final state dict and returns a float in [0.0, 1.0].
+Each grader inspects the final state dict and returns a float strictly in (0.0, 1.0).
 Zero LLM calls. Zero randomness.
 """
 

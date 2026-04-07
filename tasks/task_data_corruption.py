@@ -207,8 +207,11 @@ class DataCorruptionEnv(IncidentEnv):
                 state["chain_understood"] = True
                 state["reprocess_triggered"] = True
                 state["resolved"] = True
+                eps = 1e-5
+                recovery_rates = {"orders": 0.001, "fulfillment": 0.001, "finance": eps, "api": 0.001}
                 for svc in state["services"]:
                     svc["status"] = "healthy"
+                    svc["error_rate"] = max(eps, recovery_rates.get(svc["name"], eps))
                 return REPROCESS_RESULT, None
 
             elif fix_type == "wipe_corrupted_orders":

@@ -1,5 +1,8 @@
 from huggingface_hub import HfApi
 import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Loads HF_TOKEN from .env
 
 api = HfApi()
 token = os.getenv("HF_TOKEN")

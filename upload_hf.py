@@ -16,8 +16,13 @@ try:
         repo_id=repo_id,
         repo_type="space",
         token=token,
-        delete_patterns=["*"],  # Ensures clean sync of the restored root structures
-        ignore_patterns=[".git*", "hf_error*", "uv_error*", "hf_push_error*", "hf_upload_error*", "upload_hf.py"],
+        delete_patterns=["*"],  # Sync and delete files not present locally
+        ignore_patterns=[
+            ".git*",
+            "__pycache__",
+            ".env",
+            "upload_hf.py"
+        ],
     )
     print("Upload successful!")
 except Exception as e:

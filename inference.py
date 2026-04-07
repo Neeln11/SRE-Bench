@@ -182,10 +182,12 @@ def run_task(task_id: str) -> None:
                 done        = result["done"]
                 terminal    = result["observation"]["terminal_output"]
                 error       = result["observation"].get("last_command_error")
-                final_score = result.get("final_score") or 0.0
+                raw         = result.get("final_score")
+                eps         = 1e-6
+                final_score = float(max(eps, min(1.0 - eps, raw))) if raw is not None else eps
                 step += 1
 
-                rewards.append(f"{reward_val:.2f}")
+                rewards.append(f"{reward_val:.6f}")
                 error_str = error if error else "null"
                 print(
                     f"[STEP] step={step} action={action_str} "
@@ -204,7 +206,7 @@ def run_task(task_id: str) -> None:
                     f"Terminal output:\n{terminal}\n\n"
                     f"Services:\n{services_str}\n\n"
                     f"Step: {step}/{MAX_STEPS}  SLA remaining: {sla}\n"
-                    f"Cumulative reward: {result['info'].get('cumulative_reward', 0):.3f}\n"
+                    f"Cumulative reward: {result['info'].get('cumulative_reward', 1e-6):.6f}\n"
                 )
                 if done:
                     next_msg += f"\nEpisode finished. Final score: {final_score:.6f}"
@@ -214,10 +216,10 @@ def run_task(task_id: str) -> None:
 
             except Exception as e:
                 step += 1
-                rewards.append("0.00")
+                rewards.append("0.000001")
                 print(
                     f"[STEP] step={step} action={action_str} "
-                    f"reward=0.00 done=false error={str(e)}",
+                    f"reward=0.000001 done=false error={str(e)}",
                     flush=True,
                 )
 

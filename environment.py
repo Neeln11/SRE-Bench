@@ -101,7 +101,7 @@ class IncidentEnv:
         """Execute one action and return (obs, reward, done, info)."""
         if self._done:
             obs = self._build_observation("Episode already finished.")
-            return obs, Reward(value=0.0, done=True), True, {}
+            return obs, Reward(value=1e-6, done=True), True, {}
 
         self._step_count += 1
         terminal_output, error = self._execute_command(action)

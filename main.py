@@ -154,6 +154,9 @@ async def stream_solve(task_id: str, request: Request):
                 break
 
         score = grade_task(task_id, env.state())
+        # Global Safety Net: strict (0, 1)
+        eps = 1e-6
+        score = float(max(eps, min(1.0 - eps, score)))
         yield f"data: {_json.dumps({'type': 'end', 'score': score})}\n\n"
 
     return StreamingResponse(
@@ -225,7 +228,11 @@ def step(req: StepRequest = None):
     final_score = None
     if done:
         final_score = grade_task(env.task_id, env.state())
+        # Global Safety Net: strict (0, 1)
+        eps = 1e-6
+        final_score = float(max(eps, min(1.0 - eps, final_score)))
         info["final_score"] = final_score
+        
     return StepResponse(
         observation=obs,
         reward=reward,
@@ -253,6 +260,9 @@ def grade(req: GradeRequest = GradeRequest()):
     if env is None:
         raise HTTPException(status_code=404, detail="Session not found.")
     score = grade_task(env.task_id, env.state())
+    # Global Safety Net: strict (0, 1)
+    eps = 1e-6
+    score = float(max(eps, min(1.0 - eps, score)))
     return {"task_id": env.task_id, "score": score}
 
 

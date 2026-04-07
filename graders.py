@@ -37,7 +37,7 @@ class DiskFullGrader(BaseGrader):
     """
 
     def grade(self, state: Dict[str, Any]) -> float:
-        score = 0.0
+        score = 1e-6
 
         if state.get("disk_checked"):
             score += 0.10
@@ -79,7 +79,7 @@ class DBPoolGrader(BaseGrader):
     """
 
     def grade(self, state: Dict[str, Any]) -> float:
-        score = 0.0
+        score = 1e-6
 
         if state.get("api_log_read"):
             score += 0.05
@@ -130,7 +130,7 @@ class DataCorruptionGrader(BaseGrader):
     """
 
     def grade(self, state: Dict[str, Any]) -> float:
-        score = 0.0
+        score = 1e-6
 
         if state.get("orders_log_read"):
             score += 0.07
@@ -156,6 +156,7 @@ class DataCorruptionGrader(BaseGrader):
         if state.get("wrong_fix_attempted"):
             score -= 0.05
 
+        score = max(1e-6, score)
         return self.clamp_score(score)
 
 

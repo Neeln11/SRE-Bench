@@ -1,0 +1,23 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Logs
+*.log
+
+# System
+.DS_Store
+Thumbs.db

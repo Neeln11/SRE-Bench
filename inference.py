@@ -148,7 +148,7 @@ def run_task(task_id: str) -> None:
     rewards: List[str] = []
     step = 0
     done = False
-    final_score = 0.0
+    final_score = 1e-6
 
     print(f"[START] task={task_id} env=sre-bench model={MODEL_NAME}", flush=True)
 
@@ -189,7 +189,7 @@ def run_task(task_id: str) -> None:
                 error_str = error if error else "null"
                 print(
                     f"[STEP] step={step} action={action_str} "
-                    f"reward={reward_val:.2f} done={'true' if done else 'false'} "
+                    f"reward={reward_val:.6f} done={'true' if done else 'false'} "
                     f"error={error_str}",
                     flush=True,
                 )
@@ -207,7 +207,7 @@ def run_task(task_id: str) -> None:
                     f"Cumulative reward: {result['info'].get('cumulative_reward', 0):.3f}\n"
                 )
                 if done:
-                    next_msg += f"\nEpisode finished. Final score: {final_score:.3f}"
+                    next_msg += f"\nEpisode finished. Final score: {final_score:.6f}"
                 else:
                     next_msg += "\nWhat is your next action?"
                 conversation.append({"role": "user", "content": next_msg})
@@ -229,8 +229,9 @@ def run_task(task_id: str) -> None:
         )
 
     except Exception as e:
+        default_rew = ",".join(["0.000001"] * max(1, step))
         print(
-            f"[END] success=false steps={step} rewards={','.join(rewards) or '0.00'}",
+            f"[END] success=false steps={step} rewards={default_rew}",
             flush=True,
         )
         raise

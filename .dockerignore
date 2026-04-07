@@ -1,0 +1,10 @@
+.git
+.env
+.venv
+__pycache__
+*.pyc
+.antigravity
+.gemini
+node_modules
+dist
+build

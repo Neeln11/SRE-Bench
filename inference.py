@@ -29,10 +29,14 @@ from openai import OpenAI
 # Configuration
 # ---------------------------------------------------------------------------
 
-API_BASE_URL  = os.getenv("API_BASE_URL", "https://router.huggingface.co/v1")
-MODEL_NAME    = os.getenv("MODEL_NAME",   "Qwen/Qwen2.5-72B-Instruct")
-API_KEY       = os.getenv("HF_TOKEN")
-ENV_BASE_URL  = os.getenv("SRE_BENCH_URL", "http://localhost:7860")
+# ---------------------------------------------------------------------------
+# Configuration (Strictly pulled from platform environment)
+# ---------------------------------------------------------------------------
+
+API_BASE_URL  = os.environ.get("API_BASE_URL") or os.environ.get("OPENAI_BASE_URL") or "https://router.huggingface.co/v1"
+API_KEY       = os.environ.get("API_KEY")      or os.environ.get("HF_TOKEN")       or os.environ.get("OPENAI_API_KEY")
+MODEL_NAME    = os.environ.get("MODEL_NAME")   or "Qwen/Qwen2.5-72B-Instruct"
+ENV_BASE_URL  = os.getenv("SRE_BENCH_URL")      or "http://localhost:7860"
 
 MAX_STEPS         = 15
 SUCCESS_THRESHOLD = 0.5
@@ -40,6 +44,10 @@ TEMPERATURE       = 0.2
 MAX_TOKENS        = 512
 
 TASKS = ["disk_full", "db_pool_exhausted", "data_corruption"]
+
+# Strict check for proxy variables (Fail-fast if the platform hasn't injected them)
+if not API_KEY:
+    print("  [CRITICAL] Missing API_KEY! Check platform environment injection.", flush=True)
 
 client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
 

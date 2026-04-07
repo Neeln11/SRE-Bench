@@ -273,10 +273,7 @@ app = gr.mount_gradio_app(
     app, 
     demo, 
     path="/",
-    gradio_api_url=None,
     # These parameters moved from Blocks to launch/mount in Gradio 6.0
-    # Note: mount_gradio_app doesn't always support all launch() params, 
-    # but we will rely on the default theme if mount fails.
 )
 
 

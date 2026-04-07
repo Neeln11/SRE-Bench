@@ -231,6 +231,7 @@ def run_task(task_id: str) -> None:
         )
 
     except Exception as e:
+        final_score = 1e-6
         default_rew = ",".join(["0.000001"] * max(1, step))
         print(
             f"[END] success=false steps={step} rewards={default_rew}",

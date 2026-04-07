@@ -59,7 +59,7 @@ class Observation(BaseModel):
 # ---------------------------------------------------------------------------
 
 class Reward(BaseModel):
-    value: float = Field(..., ge=0.0, le=1.0)
+    value: float = Field(..., gt=0.0, lt=1.0)
     breakdown: Dict[str, float] = Field(default_factory=dict)
     done: bool = False
     info: Dict[str, Any] = Field(default_factory=dict)
@@ -82,7 +82,7 @@ class IncidentEnv:
         self.task_id = task_id
         self._state: Dict[str, Any] = {}
         self._step_count: int = 0
-        self._episode_reward: float = 0.0
+        self._episode_reward: float = 1e-6
         self._done: bool = False
 
     # ------------------------------------------------------------------
@@ -92,7 +92,7 @@ class IncidentEnv:
     def reset(self) -> Observation:
         """Return a fresh initial observation."""
         self._step_count = 0
-        self._episode_reward = 0.0
+        self._episode_reward = 1e-6
         self._done = False
         self._state = self._build_initial_state()
         return self._build_observation("Incident detected. Terminal ready.")
@@ -107,9 +107,9 @@ class IncidentEnv:
         terminal_output, error = self._execute_command(action)
         reward_value, breakdown = self._compute_reward(action, terminal_output)
 
-        # Clip cumulative so it stays in [0, 1]
-        self._episode_reward = min(1.0, max(0.0,
-            self._episode_reward + reward_value))
+        # Clip cumulative so it stays strictly in (0, 1)
+        eps = 1e-6
+        self._episode_reward = min(1.0 - eps, max(eps, self._episode_reward + reward_value))
 
         resolved  = self._state.get("resolved", False)
         timed_out = self._step_count >= self.MAX_STEPS

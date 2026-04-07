@@ -15,7 +15,7 @@ INITIAL_SERVICES = [
     {"name": "api",      "status": "degraded", "error_rate": 0.38, "latency_p99_ms": 8100},
     {"name": "database", "status": "degraded", "error_rate": 0.12, "latency_p99_ms": 950},
     {"name": "auth",     "status": "healthy",  "error_rate": 0.02, "latency_p99_ms": 95},
-    {"name": "payments", "status": "healthy",  "error_rate": 0.00, "latency_p99_ms": 210},
+    {"name": "payments", "status": "healthy",  "error_rate": 1e-6, "latency_p99_ms": 210},
 ]
 
 API_LOG = """\
@@ -138,7 +138,7 @@ class DBPoolEnv(IncidentEnv):
                 state["resolved"] = True
                 for svc in state["services"]:
                     svc["status"] = "healthy"
-                    svc["error_rate"] = round(0.001 * {"api":4,"database":1,"auth":0,"payments":0}.get(svc["name"],1), 3)
+                    svc["error_rate"] = max(1e-6, round(0.001 * {"api":4,"database":1,"auth":0,"payments":0}.get(svc["name"],1), 3))
                     svc["latency_p99_ms"] = {"api":145,"database":14,"auth":92,"payments":210}.get(svc["name"], 100)
                 return FIX_RESULT, None
 
@@ -161,7 +161,7 @@ class DBPoolEnv(IncidentEnv):
                 state["resolved"] = True
                 for svc in state["services"]:
                     svc["status"] = "healthy"
-                    svc["error_rate"] = round(0.001 * {"api":4,"database":1,"auth":0,"payments":0}.get(svc["name"],1), 3)
+                    svc["error_rate"] = max(1e-6, round(0.001 * {"api":4,"database":1,"auth":0,"payments":0}.get(svc["name"],1), 3))
                     svc["latency_p99_ms"] = {"api":145,"database":14,"auth":92,"payments":210}.get(svc["name"], 100)
                 return FIX_RESULT, None
             elif fix_type == "restart_service":

@@ -85,7 +85,7 @@ class StepResponse(BaseModel):
     reward: Reward
     done: bool
     info: Dict[str, Any]
-    final_score: Optional[float] = None
+    final_score: Optional[float] = 1e-6
 
 
 class GradeRequest(BaseModel):
@@ -225,7 +225,7 @@ def step(req: StepRequest = None):
             detail=f"Session '{req.session_id}' not found. Call /reset first.",
         )
     obs, reward, done, info = env.step(req.action)
-    final_score = None
+    final_score = 1e-6
     if done:
         final_score = grade_task(env.task_id, env.state())
         # Global Safety Net: strict (0, 1)

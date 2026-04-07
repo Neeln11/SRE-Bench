@@ -14,7 +14,7 @@ from environment import Action, CommandType, IncidentEnv
 INITIAL_SERVICES = [
     {"name": "api",      "status": "degraded", "error_rate": 0.45, "latency_p99_ms": 4200},
     {"name": "database", "status": "healthy",  "error_rate": 0.01, "latency_p99_ms": 120},
-    {"name": "auth",     "status": "healthy",  "error_rate": 1e-6, "latency_p99_ms": 80},
+    {"name": "auth",     "status": "healthy",  "error_rate": 1e-5, "latency_p99_ms": 80},
 ]
 
 DISK_METRICS = """\
@@ -178,7 +178,7 @@ class DiskFullEnv(IncidentEnv):
         cmd    = action.command
         params = action.params
         breakdown: Dict[str, float] = {}
-        reward = 0.0
+        reward = 1e-5
 
         if cmd == CommandType.CHECK_METRICS and params.get("target") == "disk":
             if not state.get("_disk_reward_given"):

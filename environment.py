@@ -116,14 +116,21 @@ class IncidentEnv:
         self._done = resolved or timed_out
 
         obs = self._build_observation(terminal_output, error)
+        # Strictly between 0 and 1 (exclusive)
+        eps = 1e-6
+        def clamp(v): return float(max(eps, min(1.0 - eps, v)))
+
+        final_reward = clamp(reward_value + (0.05 if resolved else 0.0))
+        clamped_cumulative = clamp(self._episode_reward)
+
         reward = Reward(
-            value=max(0.0, min(1.0, reward_value + (0.05 if resolved else 0.0))),
+            value=final_reward,
             breakdown=breakdown,
             done=self._done,
             info={
                 "resolved": resolved,
                 "timed_out": timed_out,
-                "cumulative_reward": round(self._episode_reward, 3),
+                "cumulative_reward": clamped_cumulative,
                 "step": self._step_count,
             },
         )

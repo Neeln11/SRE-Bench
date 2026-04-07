@@ -10,6 +10,11 @@ from typing import Any, Dict
 
 
 class BaseGrader:
+    def clamp_score(self, score: float) -> float:
+        """Strictly between 0 and 1 (exclusive)."""
+        epsilon = 1e-6
+        return float(max(epsilon, min(1.0 - epsilon, score)))
+
     def grade(self, state: Dict[str, Any]) -> float:
         raise NotImplementedError
 
@@ -51,7 +56,7 @@ class DiskFullGrader(BaseGrader):
         wrong = 1 if state.get("wrong_fix_attempted") else 0
         score -= wrong * 0.05
 
-        return round(max(0.0, min(1.0, score)), 3)
+        return self.clamp_score(score)
 
 
 # ---------------------------------------------------------------------------
@@ -101,7 +106,7 @@ class DBPoolGrader(BaseGrader):
         wrong = 1 if state.get("wrong_fix_attempted") else 0
         score -= wrong * 0.05
 
-        return round(max(0.0, min(1.0, score)), 3)
+        return self.clamp_score(score)
 
 
 # ---------------------------------------------------------------------------
@@ -151,7 +156,7 @@ class DataCorruptionGrader(BaseGrader):
         if state.get("wrong_fix_attempted"):
             score -= 0.05
 
-        return round(max(0.0, min(1.0, score)), 3)
+        return self.clamp_score(score)
 
 
 # ---------------------------------------------------------------------------
